@@ -38,8 +38,8 @@ calc_fwhm(mesh.f,abs(myfft(pulse1.Ert,mesh)).^2)
 
 end
 % save('delaycheck3_alpha_2_2mJ_1mJ.mat')
-
-%% DPG Plots
+%###############################code ends here##########
+%% #############################DPG Plots##################################################################################
 figure;
 myplot1('intensity','no','no',mesh.t.*1e15,EtnoIONSSTGVD,EtnoIONSST,EtnoION,Etall)
 xlabel('time (fs)')
