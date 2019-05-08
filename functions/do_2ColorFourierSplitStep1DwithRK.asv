@@ -43,16 +43,16 @@ EtS=pulse2.Ert;% Second Harmonic pulse
     Qout=trapz(mesh.t,fiber.Iconst.*abs(EtF).^2).*fiber.area_hcf;
     Qout2=trapz(mesh.t,fiber.Iconst.*abs(EtS).^2).*fiber.area_hcf;
     Qerror=(Qout-Qout2)/Qout;
-                myplot1('intensity','no','no',mesh.f,EfF,EfS)
-                xlim([0e14 15e14])
+%                 myplot1('intensity','no','no',mesh.f,EfF,EfS)
+%                 xlim([0e14 15e14])
 %                 myplot1('field','envelope','no',mesh.t,EtF,EtS)    
 %                 xlim([-100e-15 200e-15])
 % 
     [~,x_SHInitmid]=findpeaks(abs(pulse2.Ert),mesh.t,'NPeaks',1,'SortStr','descend');
     [~,x_SHmid]=findpeaks(abs(EtS),mesh.t,'NPeaks',1,'SortStr','descend');
     dt=abs(x_SHInitmid-x_SHmid);
-    title(['z=',num2str(m*mesh.dz),'  ','Q1=',num2str(Qout),'  ','dt=',num2str(dt)]);                                  
-    pause(0.1)                      
+%     title(['z=',num2str(m*mesh.dz),'  ','Q1=',num2str(Qout),'  ','dt=',num2str(dt)]);                                  
+%     pause(0.1)                      
     end
     
 end
@@ -76,18 +76,18 @@ function [result]=calcfunction(mesh,pulse1,pulse2,beam,fiber,Et1,Et2,m)
     %XPM
         It2=fiber.Iconst.*abs(Et2).^2;
         XPM=-1i*(2*fiber.n2*pulse1.w0/const.c).*It2;%refractive index is 2 times higher for XPM!
-%     SST
-        SPMSST2=(2*pi.*(mesh.f))./(pulse1.w0).*myfft((SPM).*Et1,mesh);%
-        SPMSST2(abs(SPMSST2)<1e-10.*max(abs(SPMSST2)))=0;%take care of numerical errors which might occur 
-        SPMSST=myifft(SPMSST2,mesh);                     
-%     Ionization
-        [n_e,Eg]=calc_eDensityADK(abs(Et1),mesh,fiber);
-        dNedt=zeros(1,mesh.flength);
-        dNedt(1:(end-1))=diff(n_e)/mesh.dt;
-        It=fiber.Iconst.*abs(Et1).^2;
-        ION=-Eg.*(dNedt)./(2.*It);
-        ION(isnan(ION))=0;  
+% %     SST
+%         SPMSST2=(2*pi.*(mesh.f))./(pulse1.w0).*myfft((SPM).*Et1,mesh);%
+%         SPMSST2(abs(SPMSST2)<1e-10.*max(abs(SPMSST2)))=0;%take care of numerical errors which might occur 
+%         SPMSST=myifft(SPMSST2,mesh);                     
+% %     Ionization
+%         [n_e,Eg]=calc_eDensityADK(abs(Et1),mesh,fiber);
+%         dNedt=zeros(1,mesh.flength);
+%         dNedt(1:(end-1))=diff(n_e)/mesh.dt;
+%         It=fiber.Iconst.*abs(Et1).^2;
+%         ION=-Eg.*(dNedt)./(2.*It);
+%         ION(isnan(ION))=0;  
 %         winst=[diff(imag(SPM))./mesh.dt,0];    %instantaneous frequency
     
-result=(XPM+ION).*Et1+SPMSST;
+result=(SPM+XPM).*Et1;%+SPMSST;
 end

@@ -10,7 +10,7 @@ classdef beam_init
         s.wavelength=800e-9;%[m]
         s.f0=const.c/s.wavelength;
         s.w0=2*pi*s.f0;
-        s.Q_In=2.1e-3;%[J]
+        s.Q_In=2.0e-3;%[J]
         s.Q_In2=0.1e-3;%[J]
         s.Q_Out=1e-3;%[J]
         s.t_fwhm=35e-15;%[s]

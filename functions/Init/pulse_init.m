@@ -11,7 +11,7 @@ methods
         s.t_fwhm=beam.t_fwhm/sqrt(s.order);% Pulse Duration @ FWHM
         s.tau0=s.t_fwhm/(2*sqrt(log(2)));%tau0 for Gaussian variance
         s.w0=beam.w0.*s.order;
-        s.t0=t0;%Time Delay in s
+        s.t0=-t0;%Time Delay in s
         timedelay=-(t0*1i*2*pi.*(mesh.f));     
         s.carrier=1i*s.w0.*mesh.t;% Oscillation of carrier wave
         s.ef=exp(-(2*pi.*(mesh.f)).^2.*s.tau0^2./2-timedelay);

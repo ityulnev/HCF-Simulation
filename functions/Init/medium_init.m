@@ -9,7 +9,7 @@ classdef medium_init
 methods
     function s=medium_init(mesh,beam,gas)
     s.r_hcf=200e-6;%[m]
-    s.r_mode=0.85*0.65*s.r_hcf;%radius of zeroth mode
+    s.r_mode=0.65*s.r_hcf;%radius of zeroth mode
     s.area_hcf=pi*(s.r_mode)^2;%[m^2] effective mode area taken into account!
     s.fullarea_hcf=(s.r_hcf)^2*pi;
     % s.Fluence=beam.Q_In/s.area_hcf;

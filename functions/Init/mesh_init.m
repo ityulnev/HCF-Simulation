@@ -8,13 +8,13 @@ classdef mesh_init
    methods 
        function s=mesh_init(beam,dim)
       
-        s.Lz=1000e-3;%[m]
+        s.Lz=500e-3;%[m]
         s.dz=10e-3;
         s.z=0:s.dz:s.Lz;
         s.zlength=length(s.z);
 
-        s.fmax=beam.f0*40;%[1/s]
-        s.df=2e11;
+        s.fmax=beam.f0*60;%[1/s]
+        s.df=5e11;
         s.fmin=s.df*2;
         s.f=-s.fmax:s.df:s.fmax;
         s.flength=length(s.f);
