@@ -14,7 +14,7 @@ methods
     s.fullarea_hcf=(s.r_hcf)^2*pi;
     % s.Fluence=beam.Q_In/s.area_hcf;
     s.alpha=log(beam.Q_In/beam.Q_Out);% 0.8
-%     s.alpha=0;
+    s.alpha=0;
     s.gas=gas;
     s.temperature=300;%[K]
     s.pressure=2;%[bar]
@@ -27,22 +27,22 @@ methods
         [s.npressure,s.n]=calc_refrIndex(mesh.wvl,gas,s.pressure,s.temperature); %regular refractive index
     end
 
-    s.n_ext=[zeros(1,mesh.fbound-1),s.n];
-    s.npressure_ext=[zeros(1,mesh.fbound-1),s.npressure];
+    dfbound=find(mesh.f==beam.f0,1)-mesh.fbound;%shift f0 into the middle of array
+    s.n_ext=[zeros(1,(mesh.fbound-1)-dfbound),s.n,zeros(1,dfbound)];
+    s.npressure_ext=[zeros(1,(mesh.fbound-1)-dfbound),s.npressure,zeros(1,dfbound)];%[zeros(1,mesh.fbound-1),s.npressure];
 
-    s.Iconst=0.5*s.n0*const.c*const.eps0;%Constant factor for calculating signal intensity I=Iconst*abs(E)^2
-    s.k=s.npressure_ext.*(2.*pi.*mesh.f)./const.c;
-
+    s.Iconst=0.5*s.n0*const.c*const.eps0;% Constant factor for calculating signal intensity I=Iconst*abs(E)^2
+    % wave number k
     s.k0=s.n0pressure*beam.f0*2*pi/const.c;
-    %% k 
-%     dndw=[diff(s.n)./(mesh.df*2*pi),0];
-%     dndw_ext=[zeros(1,mesh.fbound-1),dndw];
-%     s.kph=s.n_ext./const.c;
-%     s.kgr=s.kph+dndw_ext.*((2*pi.*mesh.f)./const.c);
-    s.kGV=[diff(s.k)./(mesh.df*2*pi),0];
+    s.k=s.npressure_ext.*(2.*pi.*mesh.f+beam.f0*2*pi)./const.c;
+    % expanded k=k0+k'+k''+k'''  
+    s.kGV=[0,diff(s.k)./(mesh.df*2*pi)]; 
+    s.kGV((mesh.fbound)-dfbound)=0;
+    s.kGV(mesh.flength-dfbound+1)=0;
     s.kGVD=[diff(s.kGV)./(mesh.df*2*pi),0];
-    s.kTOD=[diff(s.kGVD)./(mesh.df*2*pi),0];
-    
+    s.kGVD((mesh.fbound)-dfbound)=0;
+    s.kGVD(mesh.flength-dfbound)=0;
+    %         s.kTOD=[diff(s.kGVD)./(mesh.df*2*pi),0];
     end
 end
 end
