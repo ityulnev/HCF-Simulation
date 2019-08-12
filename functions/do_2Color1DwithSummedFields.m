@@ -48,11 +48,11 @@ function [result]=calcfunction(mesh,pulse1,pulse2,beam,fiber,Et1,Et2,m)
 %         It2=fiber.Iconst.*abs(Et2).^2;
 %         XPM=-1i*(2*fiber.n2*pulse1.w0/const.c).*It2;%refractive index is 2 times higher for XPM!
     %SST
-%         SPMSST2=(2*pi.*(mesh.f)+pulse1.w0)./(pulse1.w0).*myfft((SPM).*Et1,mesh);%
-%         LRbounds=find_bounds(SPMSST2);
-%         fwidth=mesh.df.*(LRbounds(1,2)-LRbounds(1,1));
-%         smoothfct=calc_supergaussian(mesh.f,fwidth.*3,10);
-%         SPMSST=myifft(SPMSST2.*smoothfct,mesh);                     
+        SPMSST2=(2*pi.*(mesh.f)+pulse1.w0)./(pulse1.w0).*myfft((SPM).*Et1,mesh);%
+        LRbounds=find_bounds(SPMSST2);
+        fwidth=mesh.df.*(LRbounds(1,2)-LRbounds(1,1));
+        smoothfct=calc_supergaussian(mesh.f,fwidth.*3,10);
+        SPMSST=myifft(SPMSST2.*smoothfct,mesh);                     
    %Ionization
 %         [n_e,Eg]=calc_eDensityADK(abs(Et1),mesh,fiber);
 %         dNedt=zeros(1,mesh.flength);
@@ -62,5 +62,5 @@ function [result]=calcfunction(mesh,pulse1,pulse2,beam,fiber,Et1,Et2,m)
 %         ION(isnan(ION))=0;  
 %         winst=[diff(imag(SPM))./mesh.dt,0];    %instantaneous frequency
     
-result=(SPM).*Et1;
+result=(SPM.*0).*Et1+SPMSST;
 end

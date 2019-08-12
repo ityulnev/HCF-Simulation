@@ -6,7 +6,7 @@ type=varargin{end};
 switch type
     case 'forward'
         for m=1:(length(varargin)-1)/2
-            varargout{m+(m-1)}=(const.h*const.c)./varargin{m+(m-1)};
+            varargout{m+(m-1)}=(const.c)./varargin{m+(m-1)};
             varargout{m+m}=(varargin{m+m}.*(varargin{m+(m-1)}.^2)./(const.h*const.c));
         end
     case 'back'
