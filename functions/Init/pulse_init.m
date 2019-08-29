@@ -3,7 +3,7 @@ classdef pulse_init
     
    properties
    w0;
-   t_1sigma,r_1sigma,t0,ef,et,er,Ert,carrier,A0,A0f,Fluence,Energy,Erf,Energyf,order,Irf,Irt,ptmid,pfmid,CEP,cep,fwhmF,fwhmT,tau02,Ipeak,IpeakTheo,PpeakTheo
+   t_1sigma,r_1sigma,t0,ef,et,er,Ert,carrier,A0,A0f,PeakFluence,Energy,Erf,Energyf,order,Irf,Irt,ptmid,pfmid,CEP,cep,fwhmF,fwhmT,tau02,Ipeak,IpeakTheo,PpeakTheo,Epeak
    end
 methods
     function s=pulse_init(mesh,beam,medium,Q_In,t0,order,cep)    
@@ -35,12 +35,12 @@ methods
 %         s.ef(1:mesh.fequal0)=0;
         %%
         et=myifft(s.ef,mesh);
-        s.cep=cep;
-        s.CEP=1i.*s.w0.*(-s.cep*pi./s.w0);% Carier envelope phase phi=w0*t1
-        s.et=et.*exp(1i.*s.w0.*(-s.t0)).*exp(s.CEP).*exp(s.carrier);% NO INITIAL CARRIER ### But shift of carrier from time delay
+        s.CEP=cep;
+%         s.CEP=-1i.*s.w0.*(s.cep*pi./s.w0);% Carier envelope phase phi=w0*t1
+        s.et=et.*exp(1i.*s.w0.*(-s.t0)).*exp(-1i.*s.CEP).*exp(s.carrier);% NO INITIAL CARRIER ### also shift of carrier from time delay
         if beam.Ipeak==1 
-            s.Fluence=Q_In/(medium.area_hcf/2);
-            s.A0=sqrt(s.Fluence/(sum(medium.Iconst.*abs(s.et).^2)*mesh.dt)); %
+            s.PeakFluence=Q_In/(medium.area_hcf/2);
+            s.A0=sqrt(s.PeakFluence/(sum(medium.Iconst.*abs(s.et).^2)*mesh.dt)); %
 %             s.A0f=sqrt(s.Fluence/(sum(medium.Iconst.*abs(s.ef).^2)*mesh.df)); 
         else
             s.A0=sqrt(beam.Ipeak/medium.Iconst)./max(abs(s.et));
@@ -58,6 +58,7 @@ methods
         s.ptmid=find(max(s.Irt)==s.Irt);
         s.pfmid=find(max(s.Irf)==s.Irf);       
 %%      Peak Powe&Intensity
+        s.Epeak=max(abs(s.Ert));
         s.Ipeak=max(s.Irt);
         s.PpeakTheo=0.94*(Q_In/(beam.delT/sqrt(order)));
         s.IpeakTheo=s.PpeakTheo/(medium.area_hcf/2);%Peak intensity for Gaussian beam from peak power
@@ -76,8 +77,8 @@ methods
             s.Energy=2*pi.*trapz(mesh.r,transpose(mesh.r).*trapz(mesh.t,s.Irt,2),1);
             s.Energyf=2*pi.*trapz(mesh.r,transpose(mesh.r).*trapz(mesh.f,s.Irf,2),1);
         else
-            s.Energy=medium.area_hcf.*trapz(mesh.t,s.Irt); 
-            s.Energyf=medium.area_hcf.*trapz(mesh.f,s.Irf); 
+            s.Energy=0.5*medium.area_hcf.*trapz(mesh.t,s.Irt); %half from averaging peak fluence
+            s.Energyf=0.5*medium.area_hcf.*trapz(mesh.f,s.Irf); 
         end             
 %% Test: Energy conservation & FWHM check with FFT
         tolerance=1e-4;

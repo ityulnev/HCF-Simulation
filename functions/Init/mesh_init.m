@@ -9,12 +9,12 @@ classdef mesh_init
        function s=mesh_init(beam,Lz,dim)
         %% propagation direction z
         s.Lz=Lz;%[m]
-        s.dz=10e-3;
+        s.dz=1e-3;
         s.z=0:s.dz:s.Lz;
         s.zlength=length(s.z);
         %% frequency dimension
-        s.fmax=beam.f0*80;%[1/s]
-        s.df=2e11;
+        s.fmax=beam.f0*40;%[1/s]
+        s.df=1e11;
         s.fmin=s.df*2;
         s.f=-s.fmax:s.df:s.fmax;
         s.flength=length(s.f);

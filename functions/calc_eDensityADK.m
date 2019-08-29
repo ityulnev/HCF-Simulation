@@ -24,7 +24,7 @@ switch fiber.gas
             Eg=12.13*const.e;                                              %[J] from http://www.periodensystem.info
             n_gas=2.4e25*fiber.pressure;                                                  %1/m^3  
     case 'Helium'
-            l=0;
+            l=1;
             m=0;
             Eg=24.587*const.e;
             n_gas=2.6856e25*fiber.pressure;
@@ -52,10 +52,8 @@ prod=w_factor.*exponent;
 prod(isinf(prod))=0;
 prod(isnan(prod))=0;
 W_adk=f/(8*pi*n_star).*((4*exp(1)*E_0_au./(n_star)).^(2*n_star)).*sqrt(3./(pi*E_0_au*(2*Eg_au))).*prod;  %Ionization rate
-% P_adk=1-exp(-dt_atu.*W_adk);                                               %Ioniz. propability
-% n_e=cumsum(n_gas.*(P_adk));                                                %Electron density
 P_adk=1-exp(cumsum(-dt_atu.*W_adk));
-n_e=n_gas.*P_adk;
+n_e=n_gas.*P_adk;%3.32.*
 
 
 

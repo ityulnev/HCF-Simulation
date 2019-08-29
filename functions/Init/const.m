@@ -1,6 +1,6 @@
 classdef const
     properties (Constant)
-    c=299792458;%3e8;                                                      %speed of light [m/s]
+    c=3e8;%299792458;                                                      %speed of light [m/s]
     eps0=8.854e-12;                                                        %vacumm permitivity [J/(V^2*m)]
     h=6.626e-34;                                                           %Plank Constant [Js]
     m_e=9.1094e-31;                                                        %Electron mass [kg]
