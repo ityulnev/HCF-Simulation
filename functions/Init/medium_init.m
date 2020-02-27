@@ -14,7 +14,7 @@ methods
     % s.Fluence=beam.Q_In/s.area_hcf;
     s.gas=gas;
     s.temperature=300;%[K]
-    s.pressure=2;%[bar]
+    s.pressure=1;%[bar]
 
     switch gas
         case 'Neon'
@@ -23,6 +23,7 @@ methods
         [n2pressure,n2]=calc_refrIndex(beam.wavelength,'Neon_n2',s.pressure,s.temperature);
 %         s.n2=2*7.5e-25;%@1barr pressure #### [m^2/W] Nonlinear refractive index
         s.n2=(n2pressure-s.n0pressure)/2.224e18;
+        s.n2=0.7e-24;
         case 'Helium'
         s.n2=s.pressure*7.5e-25;%0.625e-24;%[m^2/W]          -> SPM  (work in progress value for neon)
         [s.n0pressure,s.n0]=calc_refrIndex(beam.wavelength,gas,s.pressure,s.temperature); %regular refractive index

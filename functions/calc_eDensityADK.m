@@ -1,8 +1,8 @@
 %Calculates W_adk for a given E field and a given Gas
-function [n_e,Eg,n_gas]=calc_eDensityADK(Et,mesh,fiber,pulse,beam)
+function [n_e,Eg,n_gas]=calc_eDensityADK(Et,mesh,medium,pulse)
 % Et=0.5.*(Et+conj(Et));
 Et=real(Et);
-smooth=calc_supergaussian(mesh.t,beam.delT.*2,10,0);
+smooth=calc_supergaussian(mesh.t,pulse.t_pulse.*2,10,0);
 Et=smooth.*abs(Et);
 
 %          plot(mesh.t,Et)
@@ -11,23 +11,23 @@ Et=smooth.*abs(Et);
 l=1;
 m=0;
 %Gastype
-switch fiber.gas
+switch medium.gas
     case 'Neon'
             l=1;
             m=0;
             Eg=21.565*const.e;                                             %[J] from http://www.periodensystem.info/elemente/neon/
-            n_gas=2.686e25*fiber.pressure;                                                %1/m^3 
+            n_gas=2.686e25*medium.pressure;                                                %1/m^3 
     case 'Argon'
             Eg=15.76*const.e;                                              %[J] from http://www.periodensystem.info
-            n_gas=2.7e25*fiber.pressure;                                                  %1/m^3   
+            n_gas=2.7e25*medium.pressure;                                                  %1/m^3   
     case 'Xenon'
             Eg=12.13*const.e;                                              %[J] from http://www.periodensystem.info
-            n_gas=2.4e25*fiber.pressure;                                                  %1/m^3  
+            n_gas=2.4e25*medium.pressure;                                                  %1/m^3  
     case 'Helium'
             l=1;
             m=0;
             Eg=24.587*const.e;
-            n_gas=2.6856e25*fiber.pressure;
+            n_gas=2.6856e25*medium.pressure;
             
 end
 %%

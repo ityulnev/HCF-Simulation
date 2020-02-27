@@ -2,19 +2,19 @@
 classdef mesh_init
     
     properties
-    Lz,dz,z,zlength,fmax,df,fmin,f,flength,fmid,freal,t,dt,R,dr,r,rlength,wmid,wvl,dwvl,rmin,fbound,rmid,test,mode,f0equal0
+    Lz,dz,z,zlength,fmax,df,fmin,f,flength,fmid,freal,t,dt,R,dr,r,rlength,wmid,wvl,dwvl,rmin,fbound,rmid,test,mode,f0equal0,tanhfilterL,tanhfilterR,tanhfilterLR
     end
     
    methods 
        function s=mesh_init(beam,Lz,dim)
         %% propagation direction z
         s.Lz=Lz;%[m]
-        s.dz=1e-3;
+        s.dz=10e-3;
         s.z=0:s.dz:s.Lz;
         s.zlength=length(s.z);
         %% frequency dimension
-        s.fmax=beam.f0*40;%[1/s]
-        s.df=1e11;
+        s.fmax=beam.f0*20;%[1/s]
+        s.df=2e11;
         s.fmin=s.df*2;
         s.f=-s.fmax:s.df:s.fmax;
         s.flength=length(s.f);
@@ -44,6 +44,10 @@ classdef mesh_init
         %% check for energy conservation in myfft and myifft
         s.test='yes';
         s.mode='debug'; %'debug' or 'cluster'
+       %% tanh(x) filter
+       s.tanhfilterL=calc_tanhfilter((beam.f0.*s.t),s.fmid);
+       s.tanhfilterR=fliplr(ifftshift(s.tanhfilterL));
+       s.tanhfilterLR=s.tanhfilterL.*s.tanhfilterR;
        end
 
 

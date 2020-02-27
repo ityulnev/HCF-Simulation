@@ -10,10 +10,10 @@ classdef beam_init
         s.wavelength=800e-9;%[m]
         s.f0=const.c/s.wavelength;
         s.w0=2*pi*s.f0;
-        s.n_cycles=3;
-        s.Q_In=2e-3.*(s.n_cycles/3);%[J]
+        s.n_cycles=6;
+        s.Q_In=2e-3;%[J]  .*(s.n_cycles/3)
         s.Q_In2=0.1e-3;%[J]
-        s.Q_Out=2e-3;%[J]
+        s.Q_Out=1.2e-3;%[J]
         s.alpha=log(s.Q_In/s.Q_Out);% 0.8 attenuation coeffiecient
         s.alpha=0;
      

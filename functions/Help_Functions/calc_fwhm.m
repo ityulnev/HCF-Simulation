@@ -1,5 +1,5 @@
 %Calculates FWHM of data y1
-function [fwhmx]=calc_fwhm(x1,y1)
+function [fwhmx,index1,index2]=calc_fwhm(x1,y1)
 
 
 % Find the half max value.
